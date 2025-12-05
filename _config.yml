@@ -17,11 +17,11 @@ minimal_mistakes_skin    : "aqua" # "default", "air", "aqua", "contrast", "dark"
 # Site Settings
 locale                   : "en-US"
 rtl                      : # true, false (default) # turns direction of the page into right to left for RTL languages
-title                    : "Site Title"
+title                    : "베르의 개발세상"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "베르의 개발세상"
-description              : "여러 가르침들을 하나 둘 모았습니다."
+name                     : "베르"
+description              : "유익하고 재미있는 개발 정보들의 세상"
 url                      : "https://ParkJunHee9327.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
