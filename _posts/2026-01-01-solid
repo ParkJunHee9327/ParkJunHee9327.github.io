@@ -23,16 +23,608 @@ SOLID가 없으면
 <br>
 
 # Single Responsibility Principle (SRP)
-> *하나 이상의 일을 시키지 마라!*
+> *책임은 하나만 지자!*
 
 <p>
 
-단일 책임 원칙이란 *"클래스가 변경되어야 할 이유는 오직 하나여야 한다"* 는 원칙이다. 즉 클래스는 하나의 책임만 져야 한다는 것이다. </p>
+"클래스가 변경되어야 할 이유는 오직 하나여야 한다"는 원칙이다. 즉 클래스는 하나의 책임만 져야 한다는 것이다. </p>
 <p>
 
-"책임"이란 단일한 이해관계자 또는 비즈니스 규율을 의미한다. (결제 부서는 결제만, 고객 관리 부서는 고객 관리만 함) </p>
+책임이란 "단일한 이해관계자 또는 비즈니스 규율"을 의미한다. (결제 부서는 결제만, 고객 관리 부서는 고객 관리만 함) </p>
 
 <p>
 
 클래스의 책임에 해당하는 기능들은 해당 클래스 내에 **캡슐화** 되어야 한다.
 </p>
+
+<br>
+
+<SRP를 위배한 모습>
+
+```java
+public class Employee {
+    private String name;
+    private String position;
+    private double salary;
+
+    // 책임1: 비즈니스 로직
+    public double calculatePay() {
+        // 근무 시간 + 보너스 + 기여도 등을 계산하는 로직...
+        return salary * 0.8;
+    }
+
+    // 책임 2: 데이터 영속화
+    public void saveToDatabase() {
+        // DB와 연결하고 근로자 데이터를 저장하는 로직...
+        System.out.println("Saving " + name + " to database...");
+    }
+
+    // 책임 3: 보고서 생성
+    public void generatePerformanceReport() {
+        // 보고서 형식을 결정하고 생성하는 로직...
+        System.out.println("Generating performance report for " + name + "...");
+    }
+}
+```
+
+<br>
+
+<SRP를 준수한 모습>
+
+```java
+// 책임: 근로자의 구조를 나타냄
+public class Employee {
+    private String name;
+    private String position;
+    private double salary;
+
+    // 메서드들...
+}
+
+// 책임: 월급 계산하기
+public class PayCalculator {
+    public double calculatePay(Employee employee) {
+        // 월급 계산 로직...
+        return employee.getSalary() * 0.8;
+    }
+}
+
+// 책임: 근로자와 관련된 DB 상호작용
+public class EmployeeRepository {
+    public void save(Employee employee) {
+        // 근로자 DB 저장 로직...
+        System.out.println("Saving " + employee.getName() + " to database...");
+    }
+}
+
+// 책임: 근로자와 관련된 보고서 생성
+public class ReportGenerator {
+    public void generatePerformanceReport(Employee employee) {
+        // 보고서 생성 로직...
+        System.out.println("Generating performance report for " + employee.getName() + "...");
+    }
+}
+```
+
+<br>
+<br>
+
+# Open/Closed Principle (OCP)
+> *변화는 좋지만 수정은 아니다!*
+
+<p>
+
+"소프트웨어 엔티티는 변화에 개방적이지만 수정에는 폐쇄적이어야 한다"는 원칙이다. </p>
+
+<p>
+
+개방이란 "새로운 기능의 추가"를 의미한다. (ex: 소셜 로그인 서비스에 카카오 로그인 추가)
+<br>
+폐쇄란 "기존의 코드를 수정"하는 행위다. (ex: 사용자의 인증 정보를 검증할 때 userId가 아니라 email을 쓰게 됨)
+</p>
+
+<p>
+
+변화하는 요구 사항에 대해 적응성 있는 코드를 구성하는 게 목표이다.
+</p>
+
+<p>
+
+OOP의 원칙 중 **추상화와 다형성**을 이용한다.
+</p>
+
+<OCP를 위배한 모습>
+
+```java
+enum ShapeType {
+    CIRCLE, RECTANGLE, TRIANGLE
+}
+
+// 도형 데이터를 지닌 클래스
+class Shape {
+    public ShapeType type;
+    public double width;
+    public double height;
+    public double radius;
+    
+    public Shape(ShapeType type, double... dimensions) {
+        this.type = type;
+        if (type == ShapeType.CIRCLE) {
+            this.radius = dimensions[0];
+        } else if (type == ShapeType.RECTANGLE) {
+            this.width = dimensions[0];
+            this.height = dimensions[1];
+        } else if (type == ShapeType.TRIANGLE) {
+            this.width = dimensions[0];
+            this.height = dimensions[1];
+        }
+    }
+}
+
+// 넓이 계산기 클래스
+class AreaCalculator {
+    public double calculateArea(Shape shape) {
+        // 새로운 도형이 추가될 때 마다 switch문이 변경됨
+        switch (shape.type) {
+            case CIRCLE:
+                return Math.PI * shape.radius * shape.radius;
+            case RECTANGLE:
+                return shape.width * shape.height;
+            case TRIANGLE:
+                return 0.5 * shape.width * shape.height;
+            default:
+                throw new IllegalArgumentException("Unknown shape type: " + shape.type);
+        }
+    }
+}
+
+// 쓰임새
+public class OCPViolationExample {
+    public static void main(String[] args) {
+        AreaCalculator calculator = new AreaCalculator();
+        
+        Shape circle = new Shape(ShapeType.CIRCLE, 5.0);
+        Shape rectangle = new Shape(ShapeType.RECTANGLE, 4.0, 6.0);
+        Shape triangle = new Shape(ShapeType.TRIANGLE, 3.0, 4.0);
+        
+        System.out.println("Circle area: " + calculator.calculateArea(circle));
+        System.out.println("Rectangle area: " + calculator.calculateArea(rectangle));
+        System.out.println("Triangle area: " + calculator.calculateArea(triangle));
+        
+        // 문제점: 새로운 도형을 추가하려면 아래 처럼 해야한다.
+        // 1. ShapeType 열거형에 도형 추가
+        // 2. Shape의 생성자 수정
+        // 3. AreaCalculator switch문 수정
+        // 결론: 수정에 개방적인 코드가 되어버림
+    }
+}
+```
+
+<br>
+
+<OCP를 준수한 모습>
+
+```java
+// 계약을 정의하는 추상 클래스 또는 인터페이스
+interface Shape {
+    double calculateArea();
+}
+
+// 구현체: 각각의 도형이 자신의 넓이를 구하는 방법을 알고 있음
+class Circle implements Shape {
+    private double radius;
+    
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+    
+    @Override
+    public double calculateArea() {
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rectangle implements Shape {
+    private double width;
+    private double height;
+    
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+    
+    @Override
+    public double calculateArea() {
+        return width * height;
+    }
+}
+
+class Triangle implements Shape {
+    private double base;
+    private double height;
+    
+    public Triangle(double base, double height) {
+        this.base = base;
+        this.height = height;
+    }
+    
+    @Override
+    public double calculateArea() {
+        return 0.5 * base * height;
+    }
+}
+
+// 넓이 계산기 클래스
+class AreaCalculator {
+    public double calculateArea(Shape shape) {
+        // 구현체에 대해 알 필요 X
+        // 추상화와 다형성에 의존함!
+        return shape.calculateArea();
+    }
+    
+    // 추가적 이점: 기존의 코드에 손대지 않고 기능을 확장할 수 있음
+    public double calculateTotalArea(List<Shape> shapes) {
+        return shapes.stream()
+                    .mapToDouble(Shape::calculateArea)
+                    .sum();
+    }
+}
+
+// 쓰임새
+public class OCPCompliantExample {
+    public static void main(String[] args) {
+        AreaCalculator calculator = new AreaCalculator();
+        
+        Shape circle = new Circle(5.0);
+        Shape rectangle = new Rectangle(4.0, 6.0);
+        Shape triangle = new Triangle(3.0, 4.0);
+        
+        System.out.println("Circle area: " + calculator.calculateArea(circle));
+        System.out.println("Rectangle area: " + calculator.calculateArea(rectangle));
+        System.out.println("Triangle area: " + calculator.calculateArea(triangle));
+        
+        // 새로운 도형을 추가하기 쉬움 + 기존의 코드를 수정하지 않음
+        List<Shape> shapes = Arrays.asList(circle, rectangle, triangle);
+        System.out.println("Total area: " + calculator.calculateTotalArea(shapes));
+    }
+}
+```
+
+<br>
+<br>
+
+# Liskov substitution principle (LSP)
+> *자식은 부모의 역할을 할 수 있어야 한다!* <br>
+
+<p>
+
+"수퍼 클래스의 객체는 애플리케이션에 손상을 가하지 않고 자신의 서브 클래스로 치환될 수 있어야 한다"는 원칙이다. </p>
+
+<p>
+
+개방이란 "새로운 기능의 추가"를 의미한다. (ex: 소셜 로그인 서비스에 카카오 로그인 추가)
+<br>
+폐쇄란 "기존의 코드를 수정"하는 행위다. (ex: 사용자의 인증 정보를 검증할 때 userId가 아니라 email을 쓰게 됨)
+</p>
+
+<p>
+
+수퍼 클래스와 서브 클래스의 is-a 관계는 단순한 명세가 아니라 행동이어야 한다. 즉 서브 클래스가 수퍼 클래스의 행동을 하지 못하면 그건 서브 클래스가 아니다.
+</p>
+
+<p>
+
+OOP의 원칙 중 **상속과 다형성**을 이용한다.
+</p>
+
+✔️ 바바라 리스코프가 누군지 궁금하다면 [여기](https://ko.wikipedia.org/wiki/%EB%B0%94%EB%B0%94%EB%9D%BC_%EB%A6%AC%EC%8A%A4%EC%BD%94%ED%94%84)로 가보자!
+
+<LSP를 위배한 모습>
+
+```java
+// 수퍼 클래스
+class Rectangle {
+    protected int width;
+    protected int height;
+    
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+    
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+    
+    public void setWidth(int width) { this.width = width; }
+    public void setHeight(int height) { this.height = height; }
+    
+    public int getArea() {
+        return width * height;
+    }
+}
+
+// 서브 클래스
+class Square extends Rectangle {
+    public Square(int size) {
+        super(size, size);
+    }
+    
+    @Override
+    public void setWidth(int width) {
+        super.setWidth(width);
+        super.setHeight(width); // 의도치 않게 높이를 바꿈
+    }
+    
+    @Override
+    public void setHeight(int height) {
+        super.setHeight(height);
+        super.setWidth(height); // 의도치 않게 너비를 바꿈
+    }
+}
+
+// Square을 Rectangle로 바꾸면 클라이언트의 코드가 망가짐
+public class LSPViolationDemo {
+    public static void testRectangleArea(Rectangle rectangle) {
+        rectangle.setWidth(5);
+        rectangle.setHeight(4);
+        
+        int expectedArea = 20;
+        int actualArea = rectangle.getArea();
+        
+        System.out.println("Expected: " + expectedArea + ", Got: " + actualArea);
+        
+        if (actualArea != expectedArea) {
+            throw new RuntimeException("LSP Violation! Behavior changed for subclass.");
+        }
+    }
+    
+    public static void main(String[] args) {
+        Rectangle rect = new Rectangle(0, 0);
+        testRectangleArea(rect); // 예상대로 작동함. 예상한 값(20), 실제 값(20)
+        
+        Square square = new Square(0);
+        testRectangleArea(square); //  망가진 코드. 예상한 값(20), 실제 값(16)
+    }
+}
+```
+
+<br>
+
+<LSP를 준수한 모습>
+
+```java
+// 추상화가 있는 기반적 인터페이스/클래스
+interface Shape {
+    int getArea();
+}
+
+// 계약 사항들 간의 로직을 침범하지 않는 구현체
+class Rectangle implements Shape {
+    private int width;
+    private int height;
+    
+    public Rectangle(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+    
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+    
+    public void setWidth(int width) { this.width = width; }
+    public void setHeight(int height) { this.height = height; }
+    
+    @Override
+    public int getArea() {
+        return width * height;
+    }
+}
+
+class Square implements Shape {
+    private int size;
+    
+    public Square(int size) {
+        this.size = size;
+    }
+    
+    public int getSize() { return size; }
+    public void setSize(int size) { this.size = size; }
+    
+    @Override
+    public int getArea() {
+        return size * size;
+    }
+}
+
+// 모든 Shape들에 대해 동작하는 클라이언트 코드
+public class LSPCorrectDemo {
+    public static void printArea(Shape shape) {
+        System.out.println("Area: " + shape.getArea());
+    }
+    
+    public static void main(String[] args) {
+        Shape rectangle = new Rectangle(5, 4);
+        Shape square = new Square(5);
+        
+        printArea(rectangle); // Area: 20
+        printArea(square);    // Area: 25
+        
+        // 예상치 못한 결과 없이 잘 동작함!
+    }
+}
+```
+
+<br>
+<br>
+
+# Interface Segration principle (ISP)
+> *범용적 인터페이스가 아닌 특화된 인터페이스들을 쓰자!* <br>
+
+<p>
+
+"어떤 클라이언트라도 자신이 사용하지 않는 메서드에 의존해서는 안 된다"는 원칙이다. </p>
+
+<p>
+
+거대한 하나의 인터페이스를 더 작고 구체적인 인터페이스로 나누어 클라이언트가 자신에게 필요한 메서드가 쓸 수 있게 하는 원칙이다.
+<br>
+하나의 거대한 인터페이스는 여러 기능들 간 커플링 형성, 테스트의 어려움 등을 야기한다.
+</p>
+
+<ISP를 위배한 모습>
+
+```java
+// 모든 일을 혼자 다 하는 god 인터페이스
+interface MultiFunctionMachine {
+    void print(Document d);
+    void scan(Document d);
+    void fax(Document d);
+    void photocopy(Document d);
+}
+
+class OldFashionedPrinter implements MultiFunctionMachine {
+    @Override
+    public void print(Document d) {
+        // 프린트 가능
+    }
+
+    @Override
+    public void scan(Document d) {
+        // 스캔은 못 함, 하지만 억지로 구현해야 함
+        throw new UnsupportedOperationException("Scan not supported.");
+    }
+
+    @Override
+    public void fax(Document d) {
+        // 팩스도 못 함, 하지만 억지로 구현해야 함
+        throw new UnsupportedOperationException("Fax not supported.");
+    }
+    
+    @Override
+    public void photocopy(Document d) {
+        // 스캔하고 프린트를 하면 구색은 맞출 수 있겠지만 좋은 디자인은 아님
+    }
+}
+```
+
+<br>
+
+<ISP를 준수한 모습>
+
+```java
+// 책임에 맞게 나뉜 인터페이스들
+interface Printer {
+    void print(Document d);
+}
+
+interface Scanner {
+    void scan(Document d);
+}
+
+interface FaxMachine {
+    void fax(Document d);
+}
+
+interface Photocopier {
+    void photocopy(Document d);
+}
+
+// 프린트만 할 줄 아는 구식 프린터는 Printer만 구현하면 됨
+class OldFashionedPrinter implements Printer {
+    @Override
+    public void print(Document d) {
+        // 출력에 쓰는 로직...
+    }
+}
+
+// 여러 기능이 있는 현대식 기기는 여러 인터페이스들을 구현할 수 있음
+class AllInOneDevice implements Printer, Scanner, FaxMachine {
+    @Override
+    public void print(Document d) { /* 로직 */ }
+    @Override
+    public void scan(Document d) { /* 로직 */ }
+    @Override
+    public void fax(Document d) { /* 로직 */ }
+}
+```
+
+<br>
+<br>
+
+# Dependency Inversion principle (DIP)
+> *구현체 말고 추상화를 쓰자!* <br>
+
+<p>
+
+"구현체가 아닌 추상화에 의존하자"는 원칙이다.</p>
+
+<p>
+
+추상적인 것은 구체적인 것에 의존해서는 안 되지만, 구체적인 것은 추상적인 것에 의존해야 한다.
+</p>
+
+<DIP를 위배한 모습>
+
+```java
+// 낮은 레벨의 모듈(구현체)
+public class EmailService {
+    public void sendEmail(String message) {
+        // 이메일을 발송하는 로직...
+        System.out.println("Sending email: " + message);
+    }
+}
+
+// 높은 레벨의 모듈(낮은 레벨의 구현체에 의존함)
+public class NotificationService {
+    // EmailService에 대한 강력한 커플링 발생!
+    private EmailService emailService = new EmailService();
+
+    public void notify(String message) {
+        emailService.sendEmail(message);
+    }
+}
+```
+
+<br>
+
+<DIP를 준수한 모습>
+
+```java
+// 추상화(계약 사항)
+public interface MessageSender {
+    void sendMessage(String message);
+}
+
+// 낮은 레벨의 모듈 1(추상화에 의존하는 구현체)
+public class EmailService implements MessageSender {
+    @Override
+    public void sendMessage(String message) {
+        // 이메일을 발송하는 로직...
+        System.out.println("Sending email: " + message);
+    }
+}
+
+// 낮은 레벨의 모듈 2(같은 추상화에 의존하는 구현체)
+public class SMSService implements MessageSender {
+    @Override
+    public void sendMessage(String message) {
+        // SMS를 발송하는 로직...
+        System.out.println("Sending SMS: " + message);
+    }
+}
+
+// 높은 레벨의 모듈(구현체 클래스가 아닌 추상화에 의존함)
+public class NotificationService {
+    // 구현체가 아닌 추상화에 대한 참조값을 지님
+    private MessageSender sender;
+
+    // 의존성이 주입됨(대표적으로 생성자 주입). Inversion of Control(IoC) 발생
+    public NotificationService(MessageSender sender) {
+        this.sender = sender;
+    }
+
+    public void notify(String message) {
+        sender.sendMessage(message);
+    }
+}
+```
