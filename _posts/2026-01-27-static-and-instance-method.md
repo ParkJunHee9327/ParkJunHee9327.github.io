@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 메서드 Overriding / Overloading
+title: 인스턴스 메서드와 static 메서드
 ---
 ## 인스턴스 메서드
 
