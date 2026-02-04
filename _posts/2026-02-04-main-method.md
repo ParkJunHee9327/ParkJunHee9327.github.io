@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 왜 static 메서드는 오버라이딩 되지 않고, 인스턴스 메서드는 오버라이딩이 될까?
+title: main() 메서드
 ---
 
 ### main() 메서드란?
