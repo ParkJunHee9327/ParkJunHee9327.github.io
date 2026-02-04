@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Hello, first GitHub Blog!"
+title: static 메서드의 장단점
 ---
 
 ## static 메서드의 특징
