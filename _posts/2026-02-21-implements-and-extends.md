@@ -1,3 +1,8 @@
+---
+layout: single
+title: extends와 implements
+---
+
 ## 개요
 
 - extends와 implements는 둘 다 상속에 사용된다는 공통점이 있으나, 상속하는 구조에 있어 차이가 있다.
