@@ -1,6 +1,6 @@
 ---
 layout: single
-title: main() 메서드
+title: 얕은 복사와 깊은 복사
 ---
 
 ## 개요
