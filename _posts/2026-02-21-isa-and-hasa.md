@@ -1,6 +1,6 @@
 ---
 layout: single
-title: extends와 implements
+title: is-a 관계와 has-a 관계
 ---
 
 ## Is-a 관계 (상속)
