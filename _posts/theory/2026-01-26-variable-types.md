@@ -1,8 +1,6 @@
 ---
 layout: single
 title: Java의 4가지 변수들
-categories:
-  - theory
 ---
 
 ## 인스턴스 변수 (non-static 필드)
