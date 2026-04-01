@@ -1,7 +1,10 @@
 ---
 layout: single
 title: 업캐스팅과 다운캐스팅
+categories:
+  - Theory
 ---
+
 ## 업캐스팅
 
 - 자식 클래스의 타입을 부모 클래스의 타입으로 사용하는 방식이다.
