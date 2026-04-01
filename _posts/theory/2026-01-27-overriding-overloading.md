@@ -1,8 +1,6 @@
 ---
 layout: single
 title: 메서드 Overriding / Overloading
-categories:
-  - theory
 ---
 ## 메서드 오버로딩(컴파일 다형성)
 
