@@ -7,3 +7,16 @@ search: false
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+
+/* 헤더 네비게이션 글씨 가시성 조절 */
+.masthead__menu-item a {
+  color: #333 !important;      /* 원하는 글자 색상 (예: 진한 회색 #333 또는 검정 #000) */
+  opacity: 1 !important;       /* 투명도를 1로 설정하여 흐릿함을 제거 */
+  font-weight: bold;           /* 선택 사항: 글씨를 두껍게 */
+}
+
+/* 마우스를 올렸을 때(Hover) 색상 */
+.masthead__menu-item a:hover {
+  color: #000 !important;      /* 마우스 올리면 더 진하게 */
+  text-decoration: underline;  /* 선택 사항: 밑줄 표시 */
+}
