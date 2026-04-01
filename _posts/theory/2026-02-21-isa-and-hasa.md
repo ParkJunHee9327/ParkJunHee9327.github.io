@@ -1,8 +1,6 @@
 ---
 layout: single
 title: is-a 관계와 has-a 관계
-categories:
-  - theory
 ---
 
 ## Is-a 관계 (상속)
