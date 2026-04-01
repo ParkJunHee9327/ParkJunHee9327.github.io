@@ -1,8 +1,6 @@
 ---
 layout: single
 title: static 메서드의 장단점
-categories:
-  - theory
 ---
 
 ## static 메서드의 특징
