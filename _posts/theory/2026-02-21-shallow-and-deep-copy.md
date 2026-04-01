@@ -1,8 +1,6 @@
 ---
 layout: single
 title: 얕은 복사와 깊은 복사
-categories:
-  - theory
 ---
 
 ## 개요
