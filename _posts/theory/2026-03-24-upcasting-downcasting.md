@@ -1,8 +1,6 @@
 ---
 layout: single
 title: 업캐스팅과 다운캐스팅
-categories:
-  - theory
 ---
 
 ## 업캐스팅
