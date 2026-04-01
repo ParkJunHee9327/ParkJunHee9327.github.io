@@ -1,8 +1,6 @@
 ---
 layout: single
 title: 접근 제어자 종류, 사용시 주의사항
-categories:
-  - theory
 ---
 
 ## 개요
