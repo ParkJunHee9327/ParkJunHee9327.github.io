@@ -1,6 +1,8 @@
 ---
 layout: single
 title: 인스턴스 메서드와 static 메서드
+categories:
+  - theory
 ---
 ## 인스턴스 메서드
 
