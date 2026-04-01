@@ -1,8 +1,6 @@
 ---
 layout: single
 title: 기본 자료형, 참조 자료형
-categories:
-  - theory
 ---
 ## 기본 자료형 (Primitive Data Type)
 
