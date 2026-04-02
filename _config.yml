@@ -327,10 +327,10 @@ defaults:
       share: true
       related: true
   - scope:
-      path: "_posts/theory/"
+      path: "_posts/theory"
     values:
       categories: "theory"
   - scope:
-      path: "_posts/insight/"
+      path: "_posts/insight"
     values:
       categories: "insight"
