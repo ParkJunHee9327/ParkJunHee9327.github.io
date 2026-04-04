@@ -73,6 +73,7 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 <br>
 
 ### ✅ 성능 비교 표
+
 | 비교 항목 | 리팩토링 전(댓글 삽입) | 리팩토링 후(댓글 수정) | 비고 |
 |:---|:---|:---|:---:|
 | 아키텍처 | Anemic Domain Model <br> + Layered Architecture | DDD <br> + Clean Architecture | - |
