@@ -135,7 +135,7 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 * DDD의 Rich Domain Model -> 도메인 클래스가 상태 + 행동까지 책임짐
 * Clean Architecture -> 비즈니스 로직(행동)을 use case에서 책임짐
 * 결국 Rich Domain Model의 "도메인은 행동도 책임진다"를 이행하지 못 함. DDD는 도메인 클래스 관리 전략이고, Clean Architecture는 애플리케이션 전체를 구성하는 아키텍처이기 때문에 Clean Architecture의 손을 들어줌. DDD는 "애플리케이션 전체 아키텍처는 이러이러하게 하라"고 알려주지 않음.
-* 이로 인해 발생하는 영향이 뭐가 있을까?
+* "결국 Anemic Domain Model로 회귀하는 거 아닌가?"하는 의문이 남는다.
 
 <br>
 
