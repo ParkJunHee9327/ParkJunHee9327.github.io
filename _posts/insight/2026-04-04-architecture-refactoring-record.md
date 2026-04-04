@@ -3,7 +3,7 @@ layout: single
 title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링
 ---
 
-# 문제:  구조로 인한 개발 기간 연장
+# 문제: 유지보수 어려운 아키텍처로 인한 개발 기간 연장
 
 * 도메인이 단순한 Data Holder 역할을 함
     * 상태 관리 X, 행동 X
