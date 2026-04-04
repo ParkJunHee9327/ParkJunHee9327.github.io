@@ -141,8 +141,13 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 **여전히 남은 문제, 인프라와 전역적인 클래스들**
 * Config나 logging 전용 클래스들을 어떻게 관리하나? 관련된 유틸리티 클래스는 어디에 두나?
-* 횡단 관심사인 Spring Secuirty(보안) + 전역적인 예외 구조 + Config 클래스가 있는 패키지 + Logging 패키지가 모두 global 패키지 내부에 있음.
+* Cross-cutting concern인 Spring Secuirty(보안) + 전역적인 예외 구조 + Config 클래스가 있는 패키지 + Logging 패키지가 모두 global 패키지 내부에 있음.
 * 인프라와 전역적인 클래스를 다루는 구조는 DDD도, Clean Architecture도 알려주지 않음.
+
+**그래서 결론은?** <br>
+* 값을 보관하는 데 의의가 크며, 애플리케이션 내에서 전역적으로 동일한 검증을 요구하는 VO만 공유되는 kernel로 관리한다. 예시로, 모든 도메인에서 동일한 정규표현식으로 검증하는 Nickname, Email이 있다.
+* 앞서 말했듯, 현재 비즈니스 로직이 단순한 편이므로 비즈니스 로직의 오케스트레이션은 Clean Architecture의 adapter 계층이 하고 있다. 추후에 비즈니스 로직이 복잡해질 경우 use case 계층으로 비즈니스 로직을 이전할 예정이다. DDD는 전체 아키텍처에 대한 정의를 포함하지는 않고 + DDD의 Rich Domain Model을 따르더라도 "비대한 도메인 클래스"의 문제가 있기 때문이다.
+* 인프라와 전역적인 클래스들은 앞으로도 global에서 관리할 예정이다. 현재는 기능/목적 별로 global 패키지를 구성하고 있으나, 추후에 해당 패키지가 비대해질 시 추가적인 고민이 필요하다.
 
 <br>
 
