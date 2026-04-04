@@ -3,7 +3,7 @@ layout: single
 title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 ---
 
-# 문제: 유지보수 어려운 아키텍처로 인한 개발 기간 연장
+# 🧐 문제: 유지보수 어려운 아키텍처로 인한 개발 기간 연장
 
 * 도메인이 단순한 Data Holder 역할을 함
     * 상태 관리 X, 행동 X
@@ -13,15 +13,15 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
     * 클래스 수정 시 다른 도메인에 일으킬 파급력에 대한 불안감 유발
 * 비즈니스 로직을 다루는 클래스를 모두 Service로 명명 + Service들이 서로 의존함 상황
     * 새로운 Service 추가 시 순환 의존성 등 잠재적 문제 가능성 도출
-* **결론: Anemic Domain Model + Layered Architecture의 Service 계층 비대화 -> 유지보수 어려운 아키텍처 형성 -> 기능 개발 기간 증가**
+* **🩺 결론: Anemic Domain Model + Layered Architecture의 Service 계층 비대화 -> 유지보수 어려운 아키텍처 형성 -> 기능 개발 기간 증가**
 
 <br>
 
 ****
 
-# 해결 및 성과: DDD(Domain-Driven Design) + Clean Architecture 도입
+# ✨ 해결 및 성과: DDD(Domain-Driven Design) + Clean Architecture 도입
 
-### 도입 이유 및 성과
+### 🔍 도입 이유 및 성과
 * **DDD**
     * **도입 이유:** 도메인들의 경계가 불명확함, 도메인 객체가 단순한 Data Holder 역할을 함
     * 비즈니스 로직 중 비중이 높던 ValidationService -> 도메인 클래스에 흡수 (검증 로직)
@@ -40,7 +40,7 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 <br>
 
-### 애플리케이션의 맥락을 고려한 차별성
+### 🔍 애플리케이션의 맥락을 고려한 차별성
 * **도메인 클래스에 Lombok 허용**
     * Lombok은 장황한 메서드를 어노테이션으로 축약해줌 -> Lombok이 도메인 클래스의 핵심 기능에 미치는 영향력이 미미함 + 깔끔한 코드로 인한 가독성 증대 이점 -> 허용
 * **오케스트레이션을 수행하는 Adapter 계층**
@@ -61,7 +61,7 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 <br>
 
-### 수치로 측정한 성과
+### 📍 수치로 측정한 성과
 * *외부 변수를 완벽하게 통제한 결과가 아니므로 참고 지표로 해석해야 함*
 * **측정 대상:** 댓글 삽입 API, 댓글 수정 API. (동일 인물이 개발)
     * CRUD 기능이므로 두 API의 개발 난이도가 유사함.
@@ -72,7 +72,7 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 <br>
 
-### 성능 비교 표
+### ✅ 성능 비교 표
 | 비교 항목  | 리팩토링 전(댓글 삽입) | 리팩토링 후(댓글 수정) | 비고 |
 | ------------- | ------------- | ------------- |:-------------:|
 | 아키텍처 | Anemic Domain Model<br> + Layered Architecture | DDD<br> + Clean Architecture | - |
@@ -84,4 +84,4 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 ****
 
-# 회고: Anemic Domain Model + Layered Architecture
+# 🌿 회고: Anemic Domain Model + Layered Architecture
