@@ -125,29 +125,78 @@ title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
 
 <br>
 
-**실용성과 Bounded Context 사이의 균형**
-* 어디까지 공유할 것인가? 공유하는 VO를 Kernel로 뺐을 때 시간이 흘러도 공유할 수 있을까라는 의구심, 애플리케이션의 서버가 1대고 도메인들이 동일한 DB에 접근하니까 동일한 JPA 엔티티를 공유하자는 생각...
-* Bounded Context를 위해 나누는 것 vs 전역적으로 공유해서 관리 대상인 클래스를 줄이는 것 사이의 균형에 대한 고민
+### 실용성과 Bounded Context 사이의 균형
+
+도메인들끼리 어디까지 공유해야 하는지, 어디까지 도메인 전용으로 구분할지의 고민이 있다.
+* 도메인들이 공유하는 VO를 kernel로서 관리할 때, 시간이 흘러도 공유하게 될까?
+* 애플리케이션의 서버가 1대이고, 도메인들이 동일한 DB에 접근한다. 동일한 JPA 엔티티를 공유해도 되지 않을까?
 
 <br>
 
-**DDD의 Rich Domain Model과 엇맞는 Clean Architecture**
-* DDD의 Rich Domain Model -> 도메인 클래스가 상태 + 행동까지 책임짐
-* Clean Architecture -> 비즈니스 로직(행동)을 use case에서 책임짐
-* 결국 "비즈니스 로직을 어디서 관리할 것인가"에 대한 물음의 답으로 Clean Architecture를 택함. DDD는 도메인 클래스 관리 전략이고, Clean Architecture는 애플리케이션 전체를 구성하는 아키텍처이기 때문. DDD는 "애플리케이션 전체 아키텍처는 이러이러하게 하라"고 알려주지 않음.
-* "Clean Architecture에 따라 use case에서 비즈니스 로직을 관리해버리면 결국 Anemic Domain Model로 회귀하는 거 아닌가?"하는 의문이 남는다.
+Bounded Context를 유지하려고 나누는 것 vs 전역적으로 공유하여 관리할 클래스의 수를 줄이는 것 사이의 고민이 있다. 지금의 결론은 이러하다.
+* 특별한 행동 없이 값 보관 자체에 의의가 있으며, 애플리케이션 내에서 동일한 검증 로직을 적용해야 하는 VO를 kernel로서 공유한다.
+``` java
+// 현재 kernel로서 공유되고 있는 Nickname VO
+public class Nickname {
+    private final String value;
+
+    public static Nickname create(String value) {
+        if (value == null || value.isBlank()) {
+            throw new EmptyValueException(KernelErrorCode.EMPTY_NICKNAME, "nickname");
+            // 도메인 마다 동일한 정규표현식 사용
+        } else if (!PATTERN_NICKNAME.matcher(value).matches()) {
+            throw new InvalidValueException(KernelErrorCode.INVALID_NICKNAME_FORMAT, "nickname");
+        }
+        return new Nickname(value);
+    }
+```
+* 유지보수의 편의성을 위해 JPA 엔티리를 도메인들 끼리 공유하되, 도메인 내에서 엔티티를 도메인 맞춤 VO로 치환하여 Bounded Context를 유지한다.
+```
+                        // 여기서 JPA 엔티티가 도메인 맞춤 VO로 매핑됨
+                                           |
+                                           v
+identity의 Bounded Context 내부 -  jOOQ 리포지토리(identity - framework 계층) - 전역으로 공유되는 JPA 엔티티 
+```
 
 <br>
 
-**여전히 남은 문제, 인프라와 전역적인 클래스들**
-* Config나 logging 전용 클래스들을 어떻게 관리하나? 관련된 유틸리티 클래스는 어디에 두나?
-* Cross-cutting concern인 Spring Secuirty(보안) + 전역적인 예외 구조 + Config 클래스가 있는 패키지 + Logging 패키지가 모두 global 패키지 내부에 있음.
-* 인프라와 전역적인 클래스를 다루는 구조는 DDD도, Clean Architecture도 알려주지 않음.
+### 비즈니스 로직에 대한 DDD의 Rich Domain Model과 Clean Architecture의 충돌
+* DDD의 Rich Domain Model에 따르면 도메인 클래스가 상태 + 행동(비즈니스 로직)을 책임진다. <br>
+* Clean Architecture -> 비즈니스 로직을 use case에서 관리한다. <br>
 
-**그래서 결론은?** <br>
-* 값을 보관하는 데 의의가 크며, 애플리케이션 내에서 전역적으로 동일한 검증을 요구하는 VO만 공유되는 kernel로 관리한다. 예시로, 모든 도메인에서 동일한 정규표현식으로 검증하는 Nickname, Email이 있다.
-* 앞서 말했듯, 현재 비즈니스 로직이 단순한 편이므로 비즈니스 로직의 오케스트레이션은 Clean Architecture의 adapter 계층이 하고 있다. 추후에 비즈니스 로직이 복잡해질 경우 use case 계층으로 비즈니스 로직을 이전할 예정이다. DDD는 전체 아키텍처에 대한 정의를 포함하지는 않고 + DDD의 Rich Domain Model을 따르더라도 "비대한 도메인 클래스"의 문제가 있기 때문이다.
-* 인프라와 전역적인 클래스들은 앞으로도 global에서 관리할 예정이다. 현재는 기능/목적 별로 global 패키지를 구성하고 있으나, 추후에 해당 패키지가 비대해질 시 추가적인 고민이 필요하다.
+*"비즈니스 로직을 어디에 둘 것인가"* 의 쟁점이 있다.
+
+<br>
+
+지금의 결론은 다음과 같다.
+* DDD는 도메인 클래스의 관리 전략이지, 애플리케이션 전체 아키텍처를 정의하지 않음
+* Clean Architecture는 애플리케이션 전체 아키텍처를 정의함
+* Rich Domain Model 채택 시, 도메인 클래스 내에 행동이 모두 들어가게 되므로 -> 기능에 따라 use case로 비즈니스 로직을 관리하는 Clean Architecture와 부자연스럽게 통합되리라 예상됨 <br>
+
+-> 따라서, Rich Domain Model이 아닌 Clean Architecture에 따라 비즈니스 로직을 관리함 <br>
+-> 단, 앞서 언급했듯 현재 비즈니스 로직이 단순하기 때문에 adapter 계층에서 오케스트레이션 수행 <br>
+-> 비즈니스 로직의 복잡도가 늘어날 시, adapter -> use case 계층으로 옮길 예정
+
+<br>
+
+사실, 여전히 "use case 계층에서 비즈니스 로직을 관리하면 결국 Anemic Domain Model로 회귀하는 거 아닌가?"하는 의문이 있다. <br>
+Rich Domain Model의 요점은 "도메인에 대한 상태 뿐 아니라 행동도 통합적으로 캡슐화하는 것"이라고 생각한다. 비록 도메인 클래스 내부에 비즈니스 로직이 위치해있지는 않으나, 도메인을 패키지별로 나눠 명확한 Bounded Context를 설정했으니 나름의 해결책이라 하겠다.
+
+<br>
+
+### 여전히 남은 문제, 인프라와 전역적인 클래스들
+인프라 및 Cross-cutting concern은 DDD도, Clean Architecture도 "이렇게 하라"는 지침이 없다.
+* Config나 logging 클래스들을 어디에 배치하나? 관련된 유틸리티 클래스는 어디에 두나?
+* 특정 프레임워크 전용 검증 및 유틸리티 클래스는 어디에 둬야 할까?
+* 전역적으로 공유했다가 나중에 의존성이 복잡해지지 않을까?
+
+<br>
+
+지금의 결론은 다음과 같다.
+* Cross-cutting concern이다 -> infrastructure 패키지
+* 어떠한 도메인과도 무관하며, 프레임워크에 대한 의존성이 강하다 -> 전역 framework 패키지
+* 순수한 Java라서 어느 도메인이든 공유할 수 있다 -> shared 패키지
+
 
 <br>
 
