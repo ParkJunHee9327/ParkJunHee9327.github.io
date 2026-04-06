@@ -173,8 +173,8 @@ identity의 Bounded Context 내부 -  jOOQ 리포지토리(identity - framework 
 * Clean Architecture는 애플리케이션 전체 아키텍처를 정의함
 * Rich Domain Model 채택 시, 도메인 클래스 내에 행동이 모두 들어가게 되므로 -> 기능에 따라 use case로 비즈니스 로직을 관리하는 Clean Architecture와 부자연스럽게 통합되리라 예상됨 <br>
 
--> 따라서, Rich Domain Model이 아닌 Clean Architecture에 따라 비즈니스 로직을 관리함 <br>
--> 단, 앞서 언급했듯 현재 비즈니스 로직이 단순하기 때문에 adapter 계층에서 오케스트레이션 수행 <br>
+-> Rich Domain Model이 아닌 Clean Architecture에 따라 비즈니스 로직을 관리함 <br>
+-> 단, 앞서 언급했듯 현재 비즈니스 로직이 단순하기 때문에 비즈니스 로직과 흐름 제어의 경계가 모호하여 일단 adapter 계층에서 관리함 <br>
 -> 비즈니스 로직의 복잡도가 늘어날 시, adapter -> use case 계층으로 옮길 예정
 
 <br>
