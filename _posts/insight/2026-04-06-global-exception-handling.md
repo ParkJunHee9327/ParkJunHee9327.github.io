@@ -58,7 +58,7 @@ InvalidEmailException
 MemberExistsException
 
 // post 패키지의 커스텀 예외
-EmptyNicknameException // EmptyValueException의 Nickname 버전. 사용하는 ErrorCode 값만 다르고 예외 구조는 동일.
+EmptyNicknameException // EmptyValueException의 Nickname 버전.
 InvalidEmailException // member의 커스텀 예외와 일치. Bounded Context를 이유로 나눴을 뿐.
 ExistsMemberException // MemberExistsException의 이름만 바꾼 형태
 ```
