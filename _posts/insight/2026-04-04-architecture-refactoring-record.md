@@ -112,7 +112,7 @@ title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
 <br>
 
 지금은 무엇이 어디에 들어갈 지 확실하다.
-* 'Kernel은 최소한의 VO만 유지하도록 제한한다'
+* '최소한의 VO들을 Kernel로서 공유한다'
 * '도메인에 한정된 클래스는 공유하지 않는다'
 * '시스템 명세는 use case에, 구현체는 framework에 있다' <br>
 
