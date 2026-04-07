@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - DDD + Clean Architecture로 리팩토링한 이유
+title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
 ---
 
 # 🧐 문제: 유지보수 어려운 아키텍처로 인한 개발 기간 연장
