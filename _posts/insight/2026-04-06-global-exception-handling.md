@@ -47,7 +47,8 @@ public enum ErrorCode implements ResponseCode {
 * DDD에 따라 Bounded Context 유지 -> 도메인들이 예외를 거의 공유하지 않음
 * 도메인마다 "비슷한 이름의 구조가 동일한" 커스텀 예외 클래스가 과도하게 생성됨
 * 커스텀 예외의 구조가 변경될 시 수정할 클래스가 많아짐
-* 중복 예외 클래스들이 사용하는 ErrorCode 값만 다르고 하는 역할은 동일
+* 중복 예외 클래스들이 사용하는 ErrorCode 값만 다르고 하는 역할은 동일 <br>
+ 
 ```
 // member 패키지의 커스텀 예외
 EmptyValueException
@@ -62,8 +63,9 @@ ExistsMemberException // MemberExistsException의 이름만 바꾼 형태
 
 **런타임에 따른 동적 예외 메시지 전달 불가**
 * 예외 응답 발생 시 Enum 자료형인 ErrorCode에만 의존
-* Enum은 컴파일 타임에 구조가 고정됨 -> 동적으로 메시지 변경 불가능
-```
+* Enum은 컴파일 타임에 구조가 고정됨 -> 동적으로 메시지 변경 불가능 <br>
+
+``` java
 public record NormalSignUpRequest(
     @Schema(
         description = "이메일",
@@ -99,7 +101,8 @@ public record NormalSignUpRequest(
 
 **ErrorCode의 명명 규칙 정립**
 * 예외 발생 조건 + 발생 대상
-* ✅ NOT_FOUND_POST | ❌ POST_NOT_FOUND
+* ✅ NOT_FOUND_POST | ❌ POST_NOT_FOUND <br>
+
 ``` java
 // PostErrorCode: 멀티파트 데이터를 처리하므로 관련 에러 상수 보관
 UNSUPPORTED_FILE(HttpStatus.FORBIDDEN.value(), "unsupported_file", "지원되지 않는 파일 타입입니다"),
@@ -119,12 +122,14 @@ DELETED(HttpStatus.UNAUTHORIZED.value(), "deleted", "삭제된 계정입니다")
 
 ### 🔍 중복되는 커스텀 예외 통폐합 + 명명 규칙 정립
 **예외 발생 조건이 달라야 커스텀 예외 생성 가능**
+
 ``` java
 ✅ InvalidValueException, EmptyValueException
 
 ❌ InvalidMemberIdException, InvalidEmailException
 -> InvalidValueException으로 통합 + valueName 필드로 원인 명시
 ```
+
 **커스텀 예외의 명명 규칙 정립**
 * 예외 발생 조건 + 대상 + Exception
 * ✅ NotFound + Entity + Exception
@@ -133,7 +138,8 @@ DELETED(HttpStatus.UNAUTHORIZED.value(), "deleted", "삭제된 계정입니다")
 <br>
 
 ### 🔍 런타임 맥락을 위한 DynamicErrorCode 클래스 추가
-* 런타임 맥락에 따라 메시지를 수정하는 클래스 추가
+* 런타임 맥락에 따라 메시지를 수정하는 클래스 추가 <br>
+
 ``` java
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
