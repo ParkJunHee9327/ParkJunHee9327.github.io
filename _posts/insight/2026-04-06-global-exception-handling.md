@@ -16,7 +16,8 @@ title: 트러블슈팅 - 전역적인 예외 구조를 정립하며
 **단일한 ErrorCode에 모든 도메인이 의존**
 * 예외 상수를 돌려쓰다보니 일반적인 응답 + 도메인에 종속된 응답이 혼재됨
 * ErrorCode Enum의 비대화
-    * Nickname 형식이 유효하지 않네. -> (ErrorCode 탐색 후) 관련 상수가 없네. ErrorCode에 추가해야겠다. -> (며칠 후) ...ErrorCode 하단에 이미 있었네?
+    * Nickname 형식이 유효하지 않네. -> (ErrorCode 탐색 후) 관련 상수가 없네. ErrorCode에 추가해야겠다. -> (며칠 후) ...ErrorCode 하단에 이미 있었네? <br>
+
 ``` java
 // 모든 도메인에서 공유하는 ErrorCode
 public enum ErrorCode implements ResponseCode {
