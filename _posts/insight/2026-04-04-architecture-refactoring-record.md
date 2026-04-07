@@ -60,7 +60,7 @@ title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
     * 개별적인 use case 클래스 -> 비즈니스 로직 복잡도 대비 계층 분리의 부담이 더 큼
     * 따라서 adapter에서 오케스트레이션 수행 + use case는 시스템 사양(인터페이스) 정의 및 model 보관에 집중
     ``` java
-    // Validate(Domain) -> Read(Repository) -> Update(Repository)
+    // 오케스트레이션을 수행하는 adapter 계층
     public void modifyEmail(UUID memberUuid, EmailModificationRequest request) {
         if(!readRepository.existsByEmail(Email.create(request.currentEmail()))) {
             throw new NotFoundEntityException(EntityErrorCode.NOT_FOUND_MEMBER, TableName.SITE_MEMBER_AUTH);
