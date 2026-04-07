@@ -3,6 +3,17 @@ layout: single
 title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
 ---
 
+# 📌 한 줄 요약
+
+유지보수 어려운 구조 -> DDD + Clean Architecture로 리팩토링 <br>
+* 도메인들 간 의존성 정리
+* 기능 개발 기간을 30% 단축
+* 상황에 맞게 구조 적용(domain 계층에 Lombok 허용, adapter 계층의 오케스트레이션)
+
+<br>
+
+****
+
 # 🧐 문제: 유지보수 어려운 아키텍처로 인한 개발 기간 연장
 
 * 도메인이 단순한 Data Holder 역할을 함
