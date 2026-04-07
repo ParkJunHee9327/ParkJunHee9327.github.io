@@ -80,7 +80,6 @@ public record NormalSignUpRequest(
     @Pattern(regexp = Regex.REGEX_EMAIL,
             message = "이메일 서식이 올바르지 않습니다.") // 응답에 반영 불가능
     String email,
-
 ```
 
 <br>
@@ -160,7 +159,7 @@ public class DynamicErrorCode implements ErrorCode{
 }
 ```
 
-```
+``` java
 // 용례: MethodArgumentNotValidException처리 시 사용
 String message = ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
 
