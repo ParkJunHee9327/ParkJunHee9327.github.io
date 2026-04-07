@@ -28,7 +28,7 @@ title: 트러블슈팅 - 전역적인 예외 구조를 정립하며
 
 <br>
 
-### 단일한 ErrorCode에 모든 도메인이 의존
+### 🥊 단일한 ErrorCode에 모든 도메인이 의존
 
 * 모든 예외 상수를 공유하여 일반적인 응답 + 도메인에 종속된 응답이 혼재됨
 * ErrorCode Enum의 비대화
@@ -61,7 +61,7 @@ public enum ErrorCode implements ResponseCode {
 
 <br>
 
-### 중복되는 커스텀 예외 클래스의 증식
+### 🥊 중복되는 커스텀 예외 클래스의 증식
 
 * DDD에 따라 Bounded Context 유지 -> 도메인들이 예외를 거의 공유하지 않음
 * 도메인마다 "비슷한 이름의 구조가 동일한" 커스텀 예외 클래스가 과도하게 생성됨
@@ -82,7 +82,7 @@ ExistsMemberException // MemberExistsException의 이름만 바꾼 형태
 
 <br>
 
-### 런타임에 따른 동적 예외 메시지 전달 불가
+### 🥊 런타임에 따른 동적 예외 메시지 전달 불가
 * 예외 응답 발생 시 Enum 자료형인 ErrorCode에만 의존
 * Enum은 컴파일 타임에 구조가 고정됨 -> 동적으로 메시지 변경 불가능 <br>
 
@@ -222,8 +222,7 @@ DynamicErrorCode dynamicErrorCode = DynamicErrorCode.create(GeneralErrorCode.INV
 
 나의 팀원들, 그리고 예외 구조를 정립한 후의 미래의 나는 **비즈니스 로직**에 집중해야 한다. 비즈니스 로직이 조명을 받는 배우라면, 예외 처리는 배우가 올라 서는 무대이다. <br>
 
-물론 Confluence에 예외 구조에 대한 문서를 작성해놓았다. 그러나 개발자는 Confluence보다 IDE를 더 오랜 기간 동안 보는 사람이다. <br>
-*구조는 스스로를 말할 수 있어야 한다.*
+물론 Confluence에 예외 구조에 대한 문서를 작성해놓았다. 그러나 개발자는 Confluence보다 IDE를 더 오랜 기간 동안 보는 사람이다. 구조는 스스로를 말할 수 있어야 한다.
 
 <br>
 
