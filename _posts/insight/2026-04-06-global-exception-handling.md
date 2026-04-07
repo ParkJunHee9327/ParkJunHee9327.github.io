@@ -230,7 +230,7 @@ DynamicErrorCode dynamicErrorCode = DynamicErrorCode.create(GeneralErrorCode.INV
 ****
 
 # 🌿 회고 2: 여전히 남은 생각거리
-내가 만든 예외 구조는 완벽하지 않다. 여전히 고민할 사안들이 있다.
+<u>내가 만든 예외 구조는 완벽하지 않다.</u> 여전히 고민할 사안들이 있다.
 
 <br>
 
@@ -269,7 +269,7 @@ DynamicErrorCode dynamicErrorCode = DynamicErrorCode.create(GeneralErrorCode.INV
 
 <br>
 
-이는 팀원의 역량 보다는 구조적인 문제, 즉 학습 곡선에 따른 문제이다. <br>
+이는 <u>팀원의 역량 보다는 구조적인 문제</u>, 즉 학습 곡선에 따른 문제이다. <br>
 * 내가 예외 구조 정립의 담당자이므로, 당연히 예외에 대한 이해도가 내가 가장 높다.
 * 다른 팀원이 개발한 기능을 마치 자기 것 처럼 이해하기는 어렵다. 일련의 판단 과정과 트러블슈팅을 경험하지 못했기 때문이다. (나 또한 다른 팀원이 개발한 기능에 대해 대략적으로만 알고 있다)
 * 예외 구조는 유일한 정답이 없는 문제다. 우리 팀 만의 관례를 익히려면 시간이 필요할 것이다. <br>
