@@ -8,8 +8,11 @@ title: 트러블슈팅 - 전역적인 예외 구조를 정립하며
 ### 기존의 예외 처리 구조
 **커스텀 예외 처리의 흐름** <br>
 * 도메인 별 비즈니스 로직 수행 시 예외 발생
-* 커스텀 예외 throw함 + 공유하여 쓰이는 ErrorCode의 상수 사용
-* 전역적인 예외 핸들러(@RestControllerAdvice 기반)에서 클라이언트에게 에러 응답 발송
+* 커스텀 예외 throw함 + 단일한 ErrorCode가 예외 상수 제공
+* 전역적인 예외 핸들러(@RestControllerAdvice 기반)에서 클라이언트에게 에러 응답 발송 <br>
+
+**프로젝트가 단순하여 Layered Architecture를 사용했을 때는 문제 X** <br>
+**-> DDD + Clean Architecture 도입 후 도메인들이 나뉘며 문제 발생**
 
 <br>
 
