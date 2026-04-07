@@ -184,7 +184,7 @@ identity의 Bounded Context 내부 -  jOOQ 리포지토리(identity - framework 
 📌 지금의 결론은 다음과 같다.
 * DDD는 도메인 클래스의 관리 전략이지, 애플리케이션 전체 아키텍처를 정의하지 않음
 * Clean Architecture는 애플리케이션 전체 아키텍처를 정의함
-* Rich Domain Model 채택 시, 도메인 클래스 내에 행동이 모두 들어가게 되므로 -> 기능에 따라 use case로 비즈니스 로직을 관리하는 Clean Architecture와 부자연스럽게 통합되리라 예상됨
+* Rich Domain Model 채택 시, 도메인 클래스 내에 행동이 모두 들어가게 되므로 -> use case로 비즈니스 로직을 관리하는 Clean Architecture와 부자연스럽게 통합되리라 예상됨
 
 <br>
 
