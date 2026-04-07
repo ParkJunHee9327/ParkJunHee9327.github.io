@@ -51,7 +51,7 @@ public enum ErrorCode implements ResponseCode {
 * 커스텀 예외의 구조가 변경될 시 수정할 클래스가 많아짐
 * 중복 예외 클래스들이 사용하는 ErrorCode 값만 다르고 하는 역할은 동일 <br>
  
-```
+``` java
 // member 패키지의 커스텀 예외
 EmptyValueException
 InvalidEmailException
