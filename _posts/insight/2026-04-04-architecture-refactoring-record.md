@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
+title: 트러블슈팅 - 팀원들과 함께 DDD + Clean Architecture를 도입한 경험
 ---
 
 # 📌 한 줄 요약
