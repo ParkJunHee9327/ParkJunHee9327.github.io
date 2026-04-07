@@ -46,7 +46,7 @@ title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
 * **오케스트레이션을 수행하는 Adapter 계층**
     * 오케스트레이션은 use case 계층이 수행하는 게 일반적
     * 그러나 애플리케이션의 비즈니스 로직 대부분이 단순한 검증 및 DB 쿼리 수행 위주임
-    * 개별적인 use case 클래스 -> 단순한 비즈니스 로직에 있어 overkill임
+    * 개별적인 use case 클래스 -> 비즈니스 로직 복잡도 대비 계층 분리의 부담이 더 큼
     * 따라서 adapter에서 오케스트레이션 수행 + use case는 시스템 사양(인터페이스) 정의 및 model 보관에 집중
     ``` java
     // Validate(Domain) -> Read(Repository) -> Update(Repository)
@@ -101,7 +101,7 @@ title: 트러블슈팅 - DDD + Clean Architecture를 도입한 발자취
 <br>
 
 지금은 무엇이 어디에 들어갈 지 확실하다.
-* '도메인 별 공통적인 VO는 Kernel로서 공유한다'
+* 'Kernel은 최소한의 VO만 유지하도록 제한한다'
 * '도메인에 한정된 클래스는 공유하지 않는다'
 * '시스템 명세는 use case에, 구현체는 framework에 있다' <br>
 
@@ -181,12 +181,12 @@ identity의 Bounded Context 내부 -  jOOQ 리포지토리(identity - framework 
 <br>
 
 사실, 여전히 "use case 계층에서 비즈니스 로직을 관리하면 결국 Anemic Domain Model로 회귀하는 거 아닌가?"하는 의문이 있다. <br>
-Rich Domain Model의 요점은 "도메인에 대한 상태 뿐 아니라 행동도 통합적으로 캡슐화하는 것"이라고 생각한다. 비록 도메인 클래스 내부에 비즈니스 로직이 위치해있지는 않으나, 도메인을 패키지별로 나눠 명확한 Bounded Context를 설정했으니 나름의 해결책이라 하겠다.
+Rich Domain Model의 요점은 "도메인에 대한 상태 뿐 아니라 행동도 통합적으로 캡슐화하는 것"이라고 생각한다. 비록 도메인 클래스 내부에 비즈니스 로직이 위치해있지는 않으나, 도메인을 패키지별로 나눠 명확한 Bounded Context를 설정했다. 완벽한 해법은 아니다. 다만, 현재의 요구사항과 복잡도를 고려한 합리적인 선택이었다.
 
 <br>
 
 ### 🧬 여전히 남은 문제, 인프라와 전역적인 클래스들
-인프라 및 Cross-cutting concern은 DDD도, Clean Architecture도 "이렇게 하라"는 지침이 없다.
+인프라 및 Cross-cutting concern은 DDD도, Clean Architecture도 "이렇게 하라"는 지침이 없다. 초기에 유틸리티 클래스가 분산되며 코드 구조의 복잡도가 늘어나기도 했다.
 * Config나 logging 클래스들을 어디에 배치하나? 관련된 유틸리티 클래스는 어디에 두나?
 * 특정 프레임워크 전용 검증 및 유틸리티 클래스는 어디에 둬야 할까?
 * 전역적으로 공유했다가 나중에 의존성이 복잡해지지 않을까?
