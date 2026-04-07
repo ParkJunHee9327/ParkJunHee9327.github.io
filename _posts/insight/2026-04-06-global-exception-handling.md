@@ -6,12 +6,12 @@ title: 트러블슈팅 - 전역적인 예외 구조를 정립하며
 # 🧐 문제: 유지보수 어려운 예외 구조 + 늘어나는 중복 커스텀 예외 클래스
 
 ### 기존의 예외 처리 구조
-**커스텀 예외 처리의 흐름**
-```
-도메인 별 비즈니스 로직 수행 시 예외 발생
--> 커스텀 예외 throw함 + 공유하여 쓰이는 ErrorCode의 상수 사용
--> 전역적인 예외 핸들러(@RestControllerAdvice 기반)에서 클라이언트에게 에러 응답 발송
-```
+**커스텀 예외 처리의 흐름** <br>
+* 도메인 별 비즈니스 로직 수행 시 예외 발생
+* 커스텀 예외 throw함 + 공유하여 쓰이는 ErrorCode의 상수 사용
+* 전역적인 예외 핸들러(@RestControllerAdvice 기반)에서 클라이언트에게 에러 응답 발송
+
+<br>
 
 **단일한 ErrorCode에 모든 도메인이 의존**
 * 예외 상수를 돌려쓰다보니 일반적인 응답 + 도메인에 종속된 응답이 혼재됨
@@ -43,6 +43,8 @@ public enum ErrorCode implements ResponseCode {
 }
 ```
 
+<br>
+
 **중복되는 커스텀 예외 클래스의 증식**
 * DDD에 따라 Bounded Context 유지 -> 도메인들이 예외를 거의 공유하지 않음
 * 도메인마다 "비슷한 이름의 구조가 동일한" 커스텀 예외 클래스가 과도하게 생성됨
@@ -60,6 +62,8 @@ EmptyNicknameException // EmptyValueException의 Nickname 버전. 사용하는 E
 InvalidEmailException // member의 커스텀 예외와 일치. Bounded Context를 이유로 나눴을 뿐.
 ExistsMemberException // MemberExistsException의 이름만 바꾼 형태
 ```
+
+<br>
 
 **런타임에 따른 동적 예외 메시지 전달 불가**
 * 예외 응답 발생 시 Enum 자료형인 ErrorCode에만 의존
