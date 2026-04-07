@@ -147,7 +147,9 @@ public class DynamicErrorCode implements ErrorCode{
         return new DynamicErrorCode(errorCode.getHttpStatus(), errorCode.getCode(), message);
     }
 }
+```
 
+```
 // 용례: MethodArgumentNotValidException처리 시 사용
 String message = ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage();
 
