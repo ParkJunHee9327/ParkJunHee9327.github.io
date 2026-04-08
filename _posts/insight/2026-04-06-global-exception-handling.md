@@ -121,7 +121,7 @@ public record NormalSignUpRequest(
 
 **ErrorCode의 명명 규칙 정립**
 * 예외 발생 조건 + 발생 대상
-* ✅ NOT_FOUND_POST & ❌ POST_NOT_FOUND <br>
+* ✅ NOT_FOUND_POST ❌ POST_NOT_FOUND <br>
 
 ``` java
 // PostErrorCode: 멀티파트 데이터를 처리하므로 관련 에러 상수 보관
