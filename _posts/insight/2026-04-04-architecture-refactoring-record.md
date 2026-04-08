@@ -28,7 +28,7 @@ title: 트러블슈팅 - DDD + Clean Architecture 도입 과정
 * 도메인들 사이의 경계가 모호함
     * 여러 도메인들이 공통된 클래스에 의존
     * 클래스 수정 시 다른 도메인에 일으킬 파급력에 대한 불안감 유발
-* 비즈니스 로직을 다루는 클래스를 모두 Service로 명명 + Service들이 서로 의존함 상황
+* 비즈니스 로직을 다루는 클래스를 모두 Service로 명명 + Service들이 서로 의존하는 상황
     * 새로운 Service 추가 시 순환 의존성 등 잠재적 문제 가능성 도출
 * **결론: Anemic Domain Model + Layered Architecture의 Service 계층 비대화 -> 유지보수 어려운 아키텍처 형성 -> 기능 개발 기간 증가**
 
