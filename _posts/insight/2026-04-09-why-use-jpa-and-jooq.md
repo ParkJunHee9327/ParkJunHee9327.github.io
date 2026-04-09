@@ -1,5 +1,5 @@
 ---
 layout: single
-title: JPA/Hibernate와 jOOQ를 병행하면 뭐가 좋나요?
+title: 트러블슈팅 - JPA/Hibernate와 jOOQ를 병행하면 뭐가 좋나요?
 ---
 
