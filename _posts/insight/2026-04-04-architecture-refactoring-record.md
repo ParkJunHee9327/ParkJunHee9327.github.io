@@ -3,11 +3,11 @@ layout: single
 title: 트러블슈팅 - DDD + Clean Architecture 도입 과정
 ---
 
-# 📌 한 줄 요약
+# 📌 요약본
 
-유지보수 어려운 구조 -> DDD + Clean Architecture로 리팩토링 <br>
+* 유지보수 어려운 구조 -> DDD + Clean Architecture로 리팩토링
 * 도메인들 간 의존성 정리
-* 기능 개발 기간을 30% 단축
+* 기능 개발 기간 30% 단축
 * 상황에 맞게 구조 적용(domain 계층에 Lombok 허용, adapter 계층의 오케스트레이션)
 
 <br>
