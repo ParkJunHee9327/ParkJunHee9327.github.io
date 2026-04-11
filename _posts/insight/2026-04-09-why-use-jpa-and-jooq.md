@@ -5,11 +5,6 @@ title: 트러블슈팅 - JPA/Hibernate와 jOOQ를 병행하면 뭐가 좋나요?
 
 # 📌 한 줄 요약
 
-유지보수 어려운 구조 -> DDD + Clean Architecture로 리팩토링 <br>
-* 도메인들 간 의존성 정리
-* 기능 개발 기간을 30% 단축
-* 상황에 맞게 구조 적용(domain 계층에 Lombok 허용, adapter 계층의 오케스트레이션)
-
 JPA의 N+1 발생 -> ORM 기반 영속성 프레임워크 검토 이후 jOOQ 도입 <br>
 * N+1 방지로 쿼리 수 1회로 축소
 * 게시글의 JSONB 타입 지원 및 Converter -> 커스텀 타입 등록 및 매핑 로직 제거
