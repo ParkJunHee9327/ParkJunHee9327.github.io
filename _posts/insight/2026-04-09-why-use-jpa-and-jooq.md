@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - 데이터 무결성에는 JPA/Hibernate, 다중 JOIN과 집계 쿼리는 jOOQ
+title: 트러블슈팅 - 데이터 무결성과 복잡한 쿼리의 종합적 고려: JPA와 jOOQ의 병행
 ---
 
 # 📌 요약본
