@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - JPA/Hibernate와 jOOQ를 병행하면 뭐가 좋나요?
+title: 트러블슈팅 - 데이터 무결성에는 JPA/Hibernate, 다중 JOIN과 집계 쿼리는 jOOQ
 ---
 
 # 📌 요약본
