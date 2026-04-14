@@ -48,3 +48,55 @@ title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의
 <br>
 
 ****
+
+# 가설 검증 및 테스트 결과
+
+## 테스트 환경
+* **측정 도구**
+    * PostgreSQL의 EXPLAIN 사용
+    * JSON 파싱 등 응답에 수반되는 측정 대상이 아닌 작업 제외
+* **테스트 데이터**
+    * 한 게시글에 댓글 10,000개 집중
+    * 댓글 작성자는 3명으로 편중
+    * -> 소수 유저의 조회가 반복되는 구조
+* **측정 횟수**
+    * 데이터 캐시 등 요소를 고려하여 처음 2회 실행값은 배제
+    * 이후 10번 반복 측정
+
+<br>
+
+## 테스트 결과: 인덱스 도입 전/후
+### 인덱스 도입 전
+* **주요 병목 지점:** 회원 프로필과 JOIN 시 Seq Scan을 수행하여 전체 실행 시간의 **70% 이상**을 차지
+* **부차적 병목 지점:** JOIN이 완료된 댓글 데이터를 정렬한 시간 자체는 미미함. (약 25ms) 그러나 데이터 양이 많아질수록 부담이 커질 수 있는 구간임.
+* **결과:** 525ms, 278ms, 294ms, 374ms, 396ms, 267ms, 125ms, 123ms, 269ms, 172ms (평균 282.3ms)
+```
+-- 병목 구간 1
+-> Nested Loop (cost=5.49..66.80 rows=1 width=1095) (actual time=1.871..237.516 rows=10000 loops=1)
+-- 병목 구간 2
+->  Bitmap Index Scan on "PK_COMM_COMMENT"  (cost=0.00..4.42 rows=18 width=0) (actual time=1.402..1.402 rows=10010 loops=1)
+```
+
+### 인덱스 도입 후
+* **도입한 인덱스**
+
+```
+-- 특정 게시글에 등록된 댓글 식별을 위함
+CREATE INDEX IDX_COMM_COMMENT_POST_ULID ON comm_comment(post_ulid);
+-- 게시글 식별자로 선별된 댓글을 최신순 정렬하기 위함
+CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
+```
+
+* **주요 병목 지점 개선:** nested loop의 수행 시간이 0.004ms -> 0.002ms로 약 절반 가량 단축
+* **부차적 병목 지점 개선:** 정렬 시간이 277ms -> 135ms로 절반 가량 단축
+* **결과:** 107ms, 129ms, 137ms, 184ms, 127ms, 117ms, 131ms, 227ms, 153ms, 126ms (평균 143.8ms)
+
+```
+-- 중첩 반복문의 수행 시간 단축
+-> Nested Loop ... (actual time=1.871..237.516 rows=10000 loops=1)
+-> Nested Loop ... (actual time=0.791..113.356 rows=10000 loops=1)
+
+-- 정렬 시간 단축
+-> Sort  (cost=66.82..66.83 rows=1 width=1096) (actual time=276.255..277.381 rows=10000 loops=1)
+-> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
+```
