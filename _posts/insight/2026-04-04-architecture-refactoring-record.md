@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - DDD + Clean Architecture 도입 과정
+title: 트러블슈팅 - DDD + Clean Architecture 도입으로 이룬 개발 기간 단축
 ---
 
 # 📌 요약본
