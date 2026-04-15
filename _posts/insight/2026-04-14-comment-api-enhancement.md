@@ -3,7 +3,9 @@ layout: single
 title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의 DB 쿼리 속도 단축
 ---
 
-# 2026-04-14 마지막 업데이트. 내용을 매일 갱신중입니다!
+# ✍🏻 2026-04-15 마지막 업데이트. 내용을 매일 갱신중입니다!
+
+<br>
 
 # 🧐 문제: 댓글 조회 API 실행에 필요한 인덱스 최적화 부족
 
@@ -102,3 +104,14 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 -> Sort  (cost=66.82..66.83 rows=1 width=1096) (actual time=276.255..277.381 rows=10000 loops=1)
 -> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
 ```
+
+<br>
+
+## 테스트 결과 해석
+* 개선 전/후의 유일한 차이점이 "인덱스 도입 유무" 하나 뿐임
+* 인덱스가 각각의 개선점에 미친 영향을 해석하고자 함
+
+### Nested Loop
+* 
+
+### 정렬
