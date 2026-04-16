@@ -112,6 +112,29 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 * 인덱스가 각각의 개선점에 미친 영향을 해석하고자 함
 
 ### Nested Loop
-* 
+* Loop에 들어오는 comm_comment를 인덱스로 빠르게 가져오면서 전체 반복 비용이 절반 이하로 감소함
+
+```
+-- 개선 전: 특정 게시글에 속한 댓글 탐색 시 comment의 기본 키 인덱스 사용
+-> ->  Bitmap Index Scan on "PK_COMM_COMMENT"
+-> Bitmap Heap Scan on comm_comment → actual time=1.517..14.243
+
+-- 개선 후: 특정 게시글에 속한 댓글 탐색 시 comment의 post_id에 
+-> Bitmap Index Scan on "IDX_COMM_COMMENT_POST_SORT"  (cost=0.00..4.66 rows=50 width=0) (actual time=0.658..0.659 rows=10000 loops=1)
+-> Bitmap Heap Scan on comm_comment → actual time=0.705..6.759
+```
 
 ### 정렬
+* 기존에 created_at에 대한 인덱스가 없었으나, 복합 인덱스(post_ulid, created_at)가 추가되면서 동일한 10,000줄에 대한 정렬에 대해 시간이 절반 가까이 감소
+
+```
+-- 개선 전
+-> Sort  (cost=66.82..66.83 rows=1 width=1096) (actual time=276.255..277.381 rows=10000 loops=1)
+
+-- 개선 후
+-> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
+```
+
+<br>
+
+****
