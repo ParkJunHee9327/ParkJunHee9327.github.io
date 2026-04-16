@@ -111,11 +111,13 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 <br>
 
 ## 테스트 결과 해석
-* 개선 전/후의 유일한 차이점이 "인덱스 도입 유무" 하나 뿐임
-* 인덱스가 각각의 개선점에 미친 영향을 해석하고자 함
+* 인덱스 추가가 주요 변화였으나, 단일/복합 인덱스가 동시에 적용되어
+각 인덱스의 개별 기여도를 분리하지는 못함
+* 복합 인덱스(post_ulid, created_at) 순으로 **정렬된 상태의 데이터가 제공되면서 정렬 비용이 크게 감소**한 것으로 보임
 
 ### Nested Loop
-* Loop에 들어오는 comm_comment를 인덱스로 빠르게 가져오면서 전체 반복 비용이 절반 이하로 감소함
+* post_ulid 조건을 만족하는 댓글을 인덱스를 통해 빠르게 탐색하면서
+Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 
 ```
 -- 개선 전: 특정 게시글에 속한 댓글 탐색 시 comment의 기본 키 인덱스 사용
@@ -128,7 +130,7 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 ```
 
 ### 정렬
-* 기존에 created_at에 대한 인덱스가 없었으나, 복합 인덱스(post_ulid, created_at)가 추가되면서 동일한 10,000줄에 대한 정렬에 대해 시간이 절반 가까이 감소
+* 복합 인덱스를 통해 일부 정렬된 상태로 데이터가 제공되면서 처리 비용이 크게 감소한 것으로 해석됨
 
 ```
 -- 개선 전
