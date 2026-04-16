@@ -242,7 +242,7 @@ repo.findByContentContaining("{\"author\": \"kim\"}");
 
 <br>
 
-## 최종적 DB 접근 구조: JPA/Hibernate와 jOOQ의 병행
+## 💎 최종적 DB 접근 구조: JPA/Hibernate와 jOOQ의 병행
 
 * ORM 기반 영속성 프레임워크와 jOOQ는 문제의 성격에 따라 장단점이 명확함
 * 기능의 목적에 따라 장점을 적용할 수 있는 구조가 합리적이라고 판단함
@@ -259,7 +259,7 @@ repo.findByContentContaining("{\"author\": \"kim\"}");
 
 <br>
 
-## 성과
+## 💎 성과
 
 * **쿼리 수 감소:** JPA의 연관관계 탐색 과정에서 N+1이 발생하던 조회 쿼리 -> 명시적인 JOIN 쿼리로 재작성하여 쿼리 수 1회로 감소
 * **쿼리 표현력 상승:** jOOQ가 JSONB를 직접 지원 -> JSONB와 JsonNode 사이를 용이하게 변환, ORM 환경에서 필요한 커스텀 타입 처리 및 매핑 로직 제거
@@ -267,3 +267,5 @@ repo.findByContentContaining("{\"author\": \"kim\"}");
 <br>
 
 ****
+
+# 🌿 회고 : 목적에 맞는 수단을 선택하자.
