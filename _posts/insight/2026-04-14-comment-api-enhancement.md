@@ -59,7 +59,7 @@ title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의
 
 ## 테스트 환경
 * **측정 도구**
-    * PostgreSQL의 EXPLAIN 사용
+    * PostgreSQL의 EXPLAIN ANALYZE 사용
     * JSON 파싱 등 응답에 수반되는 측정 대상이 아닌 작업 제외
 * **테스트 데이터**
     * 한 게시글에 댓글 10,000개 집중
