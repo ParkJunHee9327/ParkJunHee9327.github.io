@@ -77,10 +77,6 @@ for (Order order : orders) {
 
 <br>
 
-국내에서 <u>N+1 문제 해결 방식으로 가장 널리 사용되는</u> fetch join 및 QueryDSL을 고려함
-
-<br>
-
 ## 🔍 JPA의 fetch join
 
 ### 부합하는 점
