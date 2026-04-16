@@ -268,4 +268,4 @@ repo.findByContentContaining("{\"author\": \"kim\"}");
 
 ****
 
-# 🌿 회고 : 목적에 맞는 수단을 선택하자.
+
