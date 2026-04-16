@@ -93,7 +93,7 @@ CREATE INDEX IDX_COMM_COMMENT_POST_ULID ON comm_comment(post_ulid);
 CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 ```
 
-* **주요 병목 지점 개선:** nested loop의 수행 시간이 0.004ms -> 0.002ms로 약 절반 가량 단축
+* **주요 병목 지점 개선:** nested loop의 수행 시간이 237ms -> 113ms로 감소
 * **부차적 병목 지점 개선:** 정렬 시간이 277ms -> 135ms로 절반 가량 단축
 * **결과:** 107ms, 129ms, 137ms, 184ms, 127ms, 117ms, 131ms, 227ms, 153ms, 126ms (평균 143.8ms)
 
