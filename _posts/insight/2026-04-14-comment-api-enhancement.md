@@ -13,7 +13,7 @@ title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의
 * 해당 API는 특정 게시글을 화면에 표시할 시 하단에 배치할 댓글을 표시하는 조회 API임
 * 댓글 정보 뿐 아니라 댓글 작성자및 댓글 좋아요의 정보를 동반하는 **다중 JOIN 구조**
 * **게시글 식별자에 해당하는 댓글** 기준 **created_at 기반 최신순 정렬**을 하는 작업이 포함됨
-* -> 테이블 분석 후 *일부 인덱스가 누락* 되었음을 식별함
+* -> EXPLAIN 실행 후 쿼리 패턴 대비 적절한 인덱스가 구성되어 있ㅣ 않음을 확인
 
 ``` bash
                         "public.comm_comment" 테이블
@@ -28,8 +28,7 @@ title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의
  created_at     | timestamp without time zone |          | not null |
  updated_at     | timestamp without time zone |          | not null |
 인덱스들:
-    -- 특정 게시글에 해당된 댓글 식별을 위한 인덱스 부재
-    -- 최신순 정렬을 위한 인덱스 부재
+    -- 게시글 식별자를 바탕으로 최신순 정렬을 하기 위한 인덱스의 부재
     "PK_COMM_COMMENT" PRIMARY KEY, btree (post_ulid, path)
     "idx_comm_comment_content_trgm" gin (content gin_trgm_ops)
 ```
@@ -84,18 +83,17 @@ title: 트러블슈팅 - PostgreSQL의 EXPLAIN으로 이룬 댓글 조회 API의
 ```
 
 ### 인덱스 도입 후
-* **도입한 인덱스**
+* **가설에 따라 도입한 인덱스**
 
 ```
--- 특정 게시글에 등록된 댓글 식별을 위함
+-- 게시글의 WHERE절 최적화 용도
 CREATE INDEX IDX_COMM_COMMENT_POST_ULID ON comm_comment(post_ulid);
--- 게시글 식별자로 선별된 댓글을 최신순 정렬하기 위함
+-- 게시글로 선별된 댓글의 ORDER BY절 최적화 용도
 CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 ```
 
 * **주요 병목 지점 개선:** nested loop의 수행 시간이 237ms -> 113ms로 감소
 * **부차적 병목 지점 개선:** 정렬 시간이 277ms -> 135ms로 절반 가량 단축
-* 복합 인덱스(post_ulid, created_at) 순으로 **정렬된 상태의 데이터가 제공되면서 정렬 비용이 크게 감소**한 것으로 보임
 * **결과:** 107ms, 129ms, 137ms, 184ms, 127ms, 117ms, 131ms, 227ms, 153ms, 126ms (평균 143.8ms)
 
 ```
@@ -103,12 +101,17 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 -> Nested Loop ... (actual time=1.871..237.516 rows=10000 loops=1)
 -> Nested Loop ... (actual time=0.791..113.356 rows=10000 loops=1)
 
+
 -- 정렬 시간 단축
 -> Sort  (cost=66.82..66.83 rows=1 width=1096) (actual time=276.255..277.381 rows=10000 loops=1)
 -> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
 ```
 
 <br>
+
+****
+
+# ✨ 성과 및 후속 계획
 
 ## 테스트 결과 해석
 * 인덱스 추가가 주요 변화였으나, 단일/복합 인덱스가 동시에 적용되어
@@ -153,7 +156,3 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 1. 단일 인덱스를 제거한 상태에서 복합 인덱스만으로 동일한 성능이 유지되는지 확인
 2. ANALYZE 적용을 통해 통계 정보가 실행 계획에 미치는 영향 확인
 3. 데이터 규모를 확장하여 정렬 비용 및 인덱스 효율이 어떻게 변화하는지 검증
-
-<br>
-
-****
