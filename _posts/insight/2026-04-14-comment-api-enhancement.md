@@ -120,7 +120,7 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 
 ```
 -- 개선 전: 특정 게시글에 속한 댓글 탐색 시 comment의 기본 키 인덱스 사용
--> ->  Bitmap Index Scan on "PK_COMM_COMMENT"
+-> Bitmap Index Scan on "PK_COMM_COMMENT"
 -> Bitmap Heap Scan on comm_comment → actual time=1.517..14.243
 
 -- 개선 후: 특정 게시글에 속한 댓글 탐색 시 comment의 post_id에 
