@@ -139,6 +139,8 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 -> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
 ```
 
+<br>
+
 ## 한계점 및 후속 계획
 
 ### 한계점
