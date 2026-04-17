@@ -117,7 +117,7 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 # ✨ 성과 및 후속 계획
 
 ## 📝 테스트 결과 해석
-* 기존에 PK(post_ulid, path) 인덱스를 사용했으나 created_at 기준 정렬을 지원하지 못해 추가적인 정렬 발생 + Bitmap Heap Scan으로 데이터를 수집하며 디스크 접근 범위 넓어짐 + 이후 Nested Loop에서 반복적인 접근 비용 증가
+* 기존에 PK(post_ulid, path) 인덱스를 사용했으나 created_at 기준 정렬을 지원하지 못해 추가적인 정렬 발생 + Bitmap Heap Scan으로 댓글 데이터를 조회한 뒤 Nested Loop를 통해 연관 데이터를 반복적으로 조회하는 구조 -> 댓글 수가 많아질수록 inner 테이블 접근이 반복되며 비용 증가
 * 초기에 정렬 비용이 주요 병목이라고 가정했으나, 실제로 밝혀진 결과에서는 JOIN 단계가 전체 실행 시간의 대부분을 차지함 -> 병목이 정렬이 아닌 데이터 접근 방식에 있음을 식별함
 * 복합 인덱스(post_ulid, created_at) 순으로 정렬된 상태의 데이터가 제공되면서 정렬 비용이 크게 감소한 것으로 보임
 * 개선 전/후 총 실행 시간 평균이 **282ms -> 143ms (약 45%)** 단축
@@ -158,6 +158,13 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 - Nested Loop: 113ms (약 52% 감소)
 - Sort: 135ms (약 51% 감소)
 ```
+
+## 💡 실무 환경과의 연관성
+* 본 API는 무한 스크롤 방식으로 댓글을 조회하며, 이는 cursor 기반 pagination과 유사한 접근 패턴임
+  * 댓글 조회는 특정 게시글(post_ulid)을 기준으로 필터링한 뒤, created_at 기준 최신순으로 일정 개수를 조회하는 구조
+  * 이후 추가 데이터 조회 시 마지막으로 조회된 created_at 값을 기준으로 그 이전 데이터를 조회하게 됨
+* 이러한 조회 패턴에서 (post_ulid, created_at) 복합 인덱스는 post_ulid 범위 내에서 created_at 순으로 정렬된 상태를 유지함 -> <u>별도의 정렬 없이 효율적인 range scan 가능</u>
+* 특히 cursor 기반 pagination에서는 OFFSET을 사용하지 않음 -> 데이터가 증가해도 성능 저하가 상대적으로 적으며, 해당 인덱스의 효과가 더욱 크게 나타남
 
 <br>
 
