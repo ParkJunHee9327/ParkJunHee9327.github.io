@@ -146,7 +146,7 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 -> Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
 ```
 
-### 인덱스 적용 전/후 비교
+### 인덱스 적용 전/후 비교 요약
 
 ```
 [Before]
