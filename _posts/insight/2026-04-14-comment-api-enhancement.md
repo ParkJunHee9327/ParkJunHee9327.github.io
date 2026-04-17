@@ -117,7 +117,7 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 # ✨ 성과 및 후속 계획
 
 ## 📝 테스트 결과 해석
-* 기존에 PK(post_ulid, path) 인덱스를 사용했으나 created_at 기준 정렬을 지원하지 못해 추가적인 정렬 발생 + Bitmap Heap Scan으로 댓글 데이터를 조회한 뒤 Nested Loop를 통해 연관 데이터를 반복적으로 조회하는 구조 -> 댓글 수가 많아질수록 inner 테이블 접근이 반복되며 비용 증가
+* 기존에 PK(post_ulid, path) 인덱스가 존재했으나 created_at 기준 정렬 미지원으로 추가적인 정렬 발생 + Bitmap Heap Scan으로 댓글 데이터를 조회한 뒤 Nested Loop를 통해 연관 데이터를 반복적으로 조회하는 구조 -> 댓글 수가 많아질수록 inner 테이블 접근이 반복되며 비용 증가
 * 초기에 정렬 비용이 주요 병목이라고 가정했으나, 실제로 밝혀진 결과에서는 JOIN 단계가 전체 실행 시간의 대부분을 차지함 -> 병목이 정렬이 아닌 데이터 접근 방식에 있음을 식별함
 * 복합 인덱스(post_ulid, created_at) 순으로 정렬된 상태의 데이터가 제공되면서 정렬 비용이 크게 감소한 것으로 보임
 * 개선 전/후 총 실행 시간 평균이 **282ms -> 143ms (약 45%)** 단축
