@@ -1,6 +1,6 @@
 ---
 layout: single
-title: 트러블슈팅 - EXPLAIN ANALYZE 실험으로 댓글 조회 API의 DB 쿼리 속도 단축
+title: 트러블슈팅 - EXPLAIN ANALYZE 기반으로 댓글 조회 API의 DB 쿼리 속도 단축
 ---
 
 # 📌 요약본
