@@ -113,7 +113,7 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 
 ### 📊 인덱스 도입 후
 * **주요 병목 지점:** nested loop의 수행 시간이 237ms -> 113ms로 감소
-* **부차적 병목 지점:** 정렬 작업 자체가 개선된 것은 아님. But 최종 결과를 산출하기까지의 총 소요 시간 단축
+* **부차적 병목 지점:** 정렬 작업 자체가 개선된 것은 아님. But 정렬 작업 시작 시간으로 진입하기까지의 총 작업 시간 단축
 * **결과:** 107ms, 129ms, 137ms, 184ms, 127ms, 117ms, 131ms, 227ms, 153ms, 126ms (평균 143.8ms)
 
 ```
