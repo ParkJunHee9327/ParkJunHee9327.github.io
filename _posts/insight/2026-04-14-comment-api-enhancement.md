@@ -119,7 +119,6 @@ CREATE INDEX IDX_COMM_COMMENT_POST_SORT ON comm_comment(post_ulid, created_at);
 ->  Nested Loop  (cost=5.74..144.83 rows=1 width=1095) (actual time=0.791..113.356 rows=10000 loops=1)
 ->  Seq Scan on site_member_prof  (cost=0.00..1.03 rows=3 width=532) (actual time=0.002..0.002 rows=1 loops=10000)
 
-
 -- 정렬 시간 단축
  Sort  (cost=144.85..144.85 rows=1 width=1096) (actual time=134.578..135.906 rows=10000 loops=1)
    Sort Key: comm_comment.created_at
