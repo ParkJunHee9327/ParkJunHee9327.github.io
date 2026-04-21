@@ -173,7 +173,7 @@ Heap 접근 범위가 줄어듦 -> Nested Loop 전체 수행 시간이 감소함
 
 [After]
 - Nested Loop: 113ms (약 52% 감소)
-- Sort: 135ms (약 51% 감소)
+- Sort: 135ms (시작 시간이 51% 빨라짐)
 ```
 
 <br>
